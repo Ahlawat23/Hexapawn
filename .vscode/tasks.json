@@ -11,6 +11,7 @@
                 "${file}",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "-I${workspaceFolder}/hexaPawn-2025_c++/include",
                 "-IC:/msys64/mingw64/include/SDL3",
                 "-LC:/msys64/mingw64/lib",
                 "-lSDL3"
