@@ -11,7 +11,7 @@ SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Linker flags
-LDFLAGS = -LC:/msys64/mingw64/lib -lSDL3
+LDFLAGS = -LC:/msys64/mingw64/lib -lSDL3 -mwindows
 
 all: $(TARGET)
 
