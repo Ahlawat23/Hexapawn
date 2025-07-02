@@ -10,20 +10,34 @@ Board& Board::instance() {
     return singleton_instance;
 }
 
+void Board::Init(SDL_Renderer* r){
+    renderer = r;
+    gridSize.x = gridSize.y = 3; 
+}
+
 /* This function runs once per frame, and it contains all the draw logic */
-void Board::Draw(SDL_Renderer* renderer) {
+void Board::Draw() {
 
     SDL_SetRenderDrawColorFloat(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE_FLOAT);  /* new color, full alpha. */
     SDL_RenderClear(renderer);
+    // DrawSquare(currSquareCol, 300, 0);
+    currSquareCol = SquareColour::Darker;
 
-    DrawSquare(renderer, SquareColour::Darker, 0, 0);
+    for (int i = 0; i < gridSize.x; i++)
+    {
+       for (int j = 0; j < gridSize.y; j++)
+       {
+            DrawSquare(currSquareCol, 300*i, 300*j);
+            currSquareCol = currSquareCol == SquareColour::Darker ? SquareColour::Lighter : SquareColour::Darker;
+       }
+       
+    }
     
-
     /* put the newly-cleared rendering on the screen. */
     SDL_RenderPresent(renderer);
 }
 
-void Board::DrawSquare(SDL_Renderer* renderer, SquareColour col, int x, int y ){
+void Board::DrawSquare(SquareColour col, int x, int y ){
 
     SDL_FRect rect;
     rect.x = x;
@@ -43,6 +57,8 @@ void Board::DrawSquare(SDL_Renderer* renderer, SquareColour col, int x, int y ){
     SDL_RenderFillRect(renderer, &rect);
 
 }
+
+
 
 void Board::onceDragIsDonePlayTheEnemy() {
     // Enemy move code

@@ -30,7 +30,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-
+    Board::instance().Init(renderer);
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
@@ -47,7 +47,7 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 /* This function runs once per frame, and is the heart of the program. */
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
-    Board::instance().Draw(renderer);
+    Board::instance().Draw();
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
