@@ -1,4 +1,4 @@
-# Name of the output program
+
 TARGET = main.exe
 
 # Compiler and flags
@@ -20,3 +20,7 @@ $(TARGET): $(SOURCES)
 
 clean:
 	rm -f $(TARGET) $(SRCDIR)/*.o
+
+run: all
+
+	./$(TARGET)
