@@ -1,9 +1,11 @@
 #pragma once 
+
+#include <piece.h>
 // this gonna handle the ai logic
-class Enemy
+class Enemy : public Piece
 {
     public:
-        Enemy();
+        Enemy() : Piece("assets/enemy.png") {}
         void Play();
 };
 

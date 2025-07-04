@@ -5,13 +5,14 @@ TARGET = main.exe
 CXX = g++
 CXXFLAGS = -fdiagnostics-color=always -g -Iinclude -IC:/msys64/mingw64/include/SDL3
 
+
 # Source and object files
 SRCDIR = src
 SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Linker flags
-LDFLAGS = -LC:/msys64/mingw64/lib -lSDL3 -mwindows
+LDFLAGS = -LC:/msys64/mingw64/lib -lSDL3 -lSDL3_image -lz -lpng -ljpeg -ltiff -lwebp -mwindows
 
 all: $(TARGET)
 

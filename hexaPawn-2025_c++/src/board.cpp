@@ -1,6 +1,8 @@
 #include <board.h>
 
 
+
+
 Board::Board() {
     // Initialization code
 }
@@ -12,7 +14,6 @@ Board& Board::instance() {
 
 void Board::Init(SDL_Renderer* r){
     renderer = r;
-    gridSize.x = gridSize.y = 3; 
 }
 
 /* This function runs once per frame, and it contains all the draw logic */
@@ -23,12 +24,14 @@ void Board::Draw() {
     // DrawSquare(currSquareCol, 300, 0);
     currSquareCol = SquareColour::Darker;
 
-    for (int i = 0; i < gridSize.x; i++)
+    for (int i = 0; i < BOARD_WIDTH; i++)
     {
-       for (int j = 0; j < gridSize.y; j++)
+       for (int j = 0; j < BOARD_HEIGHT; j++)
        {
             DrawSquare(currSquareCol, 300*i, 300*j);
             currSquareCol = currSquareCol == SquareColour::Darker ? SquareColour::Lighter : SquareColour::Darker;
+            grid[i][j] = Square(i, j);
+
        }
        
     }
@@ -37,8 +40,9 @@ void Board::Draw() {
     SDL_RenderPresent(renderer);
 }
 
-void Board::DrawSquare(SquareColour col, int x, int y ){
-
+void Board::DrawSquare(SquareColour col, int x, int y )
+{
+    
     SDL_FRect rect;
     rect.x = x;
     rect.y = y;
@@ -54,11 +58,15 @@ void Board::DrawSquare(SquareColour col, int x, int y ){
             SDL_SetRenderDrawColor(renderer, 3, 129, 207, SDL_ALPHA_OPAQUE); // light blue
             break;
     }
+    
     SDL_RenderFillRect(renderer, &rect);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); // light blue
+
+    string label = to_string(x) + ", " + to_string(y);
+    SDL_RenderDebugText(renderer, x, y, label.c_str());
+    
 
 }
-
-
 
 void Board::onceDragIsDonePlayTheEnemy() {
     // Enemy move code

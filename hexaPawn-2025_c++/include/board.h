@@ -1,34 +1,50 @@
 #pragma once
 
 #include <SDL3/SDL.h>
+#include <piece.h>
+#include<enemy.h>
+#include<player.h>
+
+using namespace std;
 
 enum class SquareColour{
     Darker,
     Lighter
 };
 
-struct Vector2Int
+
+
+
+struct Square
 {
     int x;
     int y;
-    Vector2Int(int x =  0, int y =0) : x(x), y(y) {}
+    Piece* currPiece = nullptr; 
+    Square(int x = 0, int y = 0) : x(x), y(y) {}
 };
 
 
+#define BOARD_WIDTH 3
+#define BOARD_HEIGHT 3
 
 
 // This handles the drawing part
 class Board
 {
     private:
-        SDL_Renderer* renderer = nullptr;
-        Vector2Int gridSize;
+        
         SquareColour currSquareCol = SquareColour::Darker;
+        Square grid[BOARD_WIDTH][BOARD_HEIGHT];
+
+        Player playerPieces;
+       
         Board();
         void DrawSquare(SquareColour col, int x, int y );
-        SquareColour GetSquareColour();
 
     public:
+
+        SDL_Renderer* renderer = nullptr;
+
         static Board& instance(); 
         void Init(SDL_Renderer* r);
         void Draw();
