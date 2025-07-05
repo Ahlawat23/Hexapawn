@@ -7,15 +7,26 @@ using namespace std;
 
 #define RECT_SIZE 150
 
+enum class PieceType{
+    player, 
+    enemy
+};
+
 class  Piece
 {
     private:
-     
+    static SDL_Texture* playerTexture;
+    static SDL_Texture* enemyTexture;
+
     public:
-    
-    SDL_Texture* Texture = nullptr;
+    PieceType _type;
+    SDL_Texture* currTexture;
     SDL_FRect rect;
-    Piece(const string& imgPath, float x = 0, float y = 0);
+    
+    static void LoadTextures();
+    static SDL_Texture* GetSprite(PieceType type);
+
+    Piece(PieceType type);
 
     void ShowAt(float x = 0, float y = 0);
     

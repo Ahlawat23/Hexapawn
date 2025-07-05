@@ -7,13 +7,13 @@
 
 using namespace std;
 
+#define GRID_WIDTH 3
+#define GRID_HEIGHT 3
+
 enum class SquareColour{
     Darker,
     Lighter
 };
-
-
-
 
 struct Square
 {
@@ -23,29 +23,20 @@ struct Square
     Square(int x = 0, int y = 0) : x(x), y(y) {}
 };
 
-
-#define BOARD_WIDTH 3
-#define BOARD_HEIGHT 3
-
-
-// This handles the drawing part
+// A singleton class that handles the drawing part of squares, pieces and taps
 class Board
 {
     private:
-        
         SquareColour currSquareCol = SquareColour::Darker;
-        Square grid[BOARD_WIDTH][BOARD_HEIGHT];
-        Player* pla = nullptr;
-       
+        Square grid[GRID_WIDTH][GRID_HEIGHT];
+        Player* playerPieces[3] = {nullptr, nullptr, nullptr};
+        Enemy* enemyPieces[3] = {nullptr, nullptr, nullptr};
         Board();
         void DrawSquare(SquareColour col, int x, int y );
 
     public:
-
         SDL_Renderer* renderer = nullptr;
-
         static Board& instance(); 
         void Init(SDL_Renderer* r);
         void Draw();
-        void onceDragIsDonePlayTheEnemy();
 };

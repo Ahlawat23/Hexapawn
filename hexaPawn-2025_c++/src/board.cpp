@@ -1,10 +1,8 @@
 #include <board.h>
 
 
-
-
 Board::Board() {
-    // Initialization code
+  // Initialization code
 }
 
 Board& Board::instance() {
@@ -13,44 +11,61 @@ Board& Board::instance() {
 }
 
 void Board::Init(SDL_Renderer* r){
-    renderer = r;
-    if (!pla)
-        pla = new Player();
+    renderer = r; 
+    Piece::LoadTextures();
+    //init player pieces
+    for (int i = 0; i < sizeof(playerPieces)/sizeof(playerPieces[0]); i++) playerPieces[i] = new Player();
+    //init enemy pieces
+    for (int i = 0; i < sizeof(enemyPieces)/sizeof(enemyPieces[0]); i++)  enemyPieces[i] = new Enemy();
+    //init grid and set player pieces
+    for (int x = 0; x < GRID_WIDTH; x++)
+    {
+       for (int y = 0; y < GRID_HEIGHT; y++)
+       {
+            grid[x][y] = Square(x*300, y*300); 
+            grid[x][GRID_HEIGHT-1].currPiece = enemyPieces[x];
+
+       }
+       grid[x][0].currPiece = playerPieces[x]; 
+    }
 }
 
 /* This function runs once per frame, and it contains all the draw logic */
 void Board::Draw() {
 
-    SDL_SetRenderDrawColorFloat(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE_FLOAT);  /* new color, full alpha. */
-    SDL_RenderClear(renderer);
-    // DrawSquare(currSquareCol, 300, 0);
     currSquareCol = SquareColour::Darker;
-
-    for (int i = 0; i < BOARD_WIDTH; i++)
+    //double loop to iterate through each grid cell
+    for (int i = 0; i < GRID_WIDTH; i++)
     {
-       for (int j = 0; j < BOARD_HEIGHT; j++)
+       for (int j = 0; j < GRID_HEIGHT; j++)
        {
-            DrawSquare(currSquareCol, 300*i, 300*j);
+            int xVal = grid[i][j].x;
+            int yVal = grid[i][j].y;
+
+            //draw the square and then draw the piece if it has any
+            DrawSquare(currSquareCol, xVal, yVal);
+            if(grid[i][j].currPiece) grid[i][j].currPiece->ShowAt(xVal, yVal);
+
+            //flip the colour
             currSquareCol = currSquareCol == SquareColour::Darker ? SquareColour::Lighter : SquareColour::Darker;
-            grid[i][j] = Square(i, j);
 
        }
-       
     }
-    pla->ShowAt(0, 0);
+    
     /* put the newly-cleared rendering on the screen. */
     SDL_RenderPresent(renderer);
 }
 
 void Board::DrawSquare(SquareColour col, int x, int y )
 {
-    
+    //create a rect of 300 width and height
     SDL_FRect rect;
     rect.x = x;
     rect.y = y;
     rect.w = 300;
     rect.h = 300;
 
+    //set draw color
     switch (col) {
             break;
         case SquareColour::Darker:
@@ -61,6 +76,7 @@ void Board::DrawSquare(SquareColour col, int x, int y )
             break;
     }
     
+    //draw the square
     SDL_RenderFillRect(renderer, &rect);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); // light blue
 
@@ -70,7 +86,4 @@ void Board::DrawSquare(SquareColour col, int x, int y )
 
 }
 
-void Board::onceDragIsDonePlayTheEnemy() {
-    // Enemy move code
-}
 

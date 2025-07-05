@@ -5,8 +5,8 @@
 class Enemy : public Piece
 {
     public:
-        Enemy() : Piece("assets/enemy.png") {}
-        void Play();
+    Enemy() : Piece(PieceType::enemy) {}
+
 };
 
 

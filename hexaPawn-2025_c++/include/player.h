@@ -6,11 +6,7 @@
 class Player: public Piece
 {
     public:
-        Player() : Piece("assets/player.png") {}
-        void handleDrag();
-        void validateDrag();
-        void sendToBoard();
-       
+    Player() : Piece(PieceType::player) {}
 
 };
 
