@@ -36,7 +36,7 @@ class Board
         SquareColour currSquareCol = SquareColour::Darker;
         Square grid[BOARD_WIDTH][BOARD_HEIGHT];
 
-        Player playerPieces;
+        
        
         Board();
         void DrawSquare(SquareColour col, int x, int y );

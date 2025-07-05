@@ -17,6 +17,6 @@ class  Piece
     SDL_FRect rect;
     Piece(const string& imgPath, float x = 0, float y = 0);
 
-    void ShowAt(int x = 0, int y = 0);
+    void ShowAt(float x = 0, float y = 0);
     
 };

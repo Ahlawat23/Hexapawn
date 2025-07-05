@@ -2,6 +2,9 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <board.h>
+#include <SDL3_image/SDL_image.h>
+#include <iostream>
+#include <string>
 
 /* SDL Vars */
 static SDL_Window *window = NULL;
@@ -22,6 +25,12 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
 
     if (!SDL_Init(SDL_INIT_VIDEO)) {
         SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
+        return SDL_APP_FAILURE;
+    }
+
+     // Initialize SDL_image for PNG and JPG support
+    if ((IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) & (IMG_INIT_PNG | IMG_INIT_JPG)) == 0) {
+        SDL_Log("Couldn't initialize SDL_image: %s", IMG_GetError());
         return SDL_APP_FAILURE;
     }
 

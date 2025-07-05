@@ -9,7 +9,7 @@ Piece::Piece(const string& imgPath, float x , float y ){
 
 }
 
-void Piece::ShowAt(int x , int y ){
+void Piece::ShowAt(float x , float y ){
     rect.x = x;
     rect.y = y;
     SDL_RenderTexture(Board::instance().renderer, Texture, NULL, &rect);
