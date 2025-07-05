@@ -14,6 +14,8 @@ Board& Board::instance() {
 
 void Board::Init(SDL_Renderer* r){
     renderer = r;
+    if (!pla)
+        pla = new Player();
 }
 
 /* This function runs once per frame, and it contains all the draw logic */
@@ -35,7 +37,7 @@ void Board::Draw() {
        }
        
     }
-    
+    pla->ShowAt(0, 0);
     /* put the newly-cleared rendering on the screen. */
     SDL_RenderPresent(renderer);
 }

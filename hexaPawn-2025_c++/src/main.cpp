@@ -15,8 +15,9 @@ static Uint64 last_time = 0;
 #define WINDOW_HEIGHT 900
 
 /* hexapawn Vars */
-
-
+static SDL_Texture *texture = NULL;
+extern unsigned char icon_bmp[];
+extern unsigned int icon_bmp_len;
 
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
@@ -28,11 +29,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         return SDL_APP_FAILURE;
     }
 
-     // Initialize SDL_image for PNG and JPG support
-    if ((IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) & (IMG_INIT_PNG | IMG_INIT_JPG)) == 0) {
-        SDL_Log("Couldn't initialize SDL_image: %s", IMG_GetError());
-        return SDL_APP_FAILURE;
-    }
+  
 
     if (!SDL_CreateWindowAndRenderer("Hexapawn by Pankaj Ahlawat", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer)) {
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
@@ -57,7 +54,6 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
     Board::instance().Draw();
-
     return SDL_APP_CONTINUE;  /* carry on with the program! */
 }
 
@@ -66,3 +62,5 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
     /* SDL will clean up the window/renderer for us. */
 }
+
+
