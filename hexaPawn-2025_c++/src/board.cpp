@@ -23,10 +23,11 @@ void Board::Init(SDL_Renderer* r){
        for (int y = 0; y < GRID_HEIGHT; y++)
        {
             grid[x][y] = Square(x*300, y*300); 
-            grid[x][GRID_HEIGHT-1].currPiece = enemyPieces[x];
 
        }
-       grid[x][0].currPiece = playerPieces[x]; 
+       grid[x][0].currPiece = enemyPieces[x]; 
+       grid[x][GRID_HEIGHT-1].currPiece = playerPieces[x];
+
     }
 }
 
@@ -69,10 +70,10 @@ void Board::DrawSquare(SquareColour col, int x, int y )
     switch (col) {
             break;
         case SquareColour::Darker:
-            SDL_SetRenderDrawColor(renderer, 2, 86, 157, SDL_ALPHA_OPAQUE); // blue
+            SDL_SetRenderDrawColor(renderer, 0, 93, 168, SDL_ALPHA_OPAQUE); // blue
             break;
         case SquareColour::Lighter:
-            SDL_SetRenderDrawColor(renderer, 3, 129, 207, SDL_ALPHA_OPAQUE); // light blue
+            SDL_SetRenderDrawColor(renderer, 163, 213, 255, SDL_ALPHA_OPAQUE); // light blue
             break;
     }
     

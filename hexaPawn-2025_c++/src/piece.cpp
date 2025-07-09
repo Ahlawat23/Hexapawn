@@ -36,6 +36,7 @@ SDL_Texture* Piece::GetSprite(PieceType type){
 
         case PieceType::enemy:
            return enemyTexture;
+           
         default:
             return nullptr;
     }
@@ -43,19 +44,9 @@ SDL_Texture* Piece::GetSprite(PieceType type){
 }
 
 void Piece::ShowAt(float x , float y ){
-
-    /* Center the icon and scale it up */
-    // SDL_GetRenderOutputSize(Board::instance().renderer, &rect.w, RECT_SIZE);
-    // SDL_SetRenderScale(Board::instance().renderer, 1.0f, 1.0f);
     SDL_GetTextureSize(currTexture, &rect.w, &rect.h);
     rect.x = x+ (rect.w/2);
     rect.y = y+ (rect.h/2);
 
-    /* Draw the icon */
-    // SDL_SetRenderDrawColor(Board::instance().renderer, 0, 0, 0, 255);
-    // SDL_RenderClear(Board::instance().renderer);
     SDL_RenderTexture(Board::instance().renderer, currTexture, NULL, &rect);
-    //SDL_RenderPresent(renderer);
-    
-
 }
