@@ -70,10 +70,10 @@ void Board::DrawSquare(SquareColour col, int x, int y )
     switch (col) {
             break;
         case SquareColour::Darker:
-            SDL_SetRenderDrawColor(renderer, 0, 93, 168, SDL_ALPHA_OPAQUE); // blue
+            SDL_SetRenderDrawColor(renderer, 11, 110, 171, SDL_ALPHA_OPAQUE); // blue
             break;
         case SquareColour::Lighter:
-            SDL_SetRenderDrawColor(renderer, 163, 213, 255, SDL_ALPHA_OPAQUE); // light blue
+            SDL_SetRenderDrawColor(renderer, 77, 172, 229, SDL_ALPHA_OPAQUE); // light blue
             break;
     }
     
