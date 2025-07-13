@@ -27,7 +27,10 @@ class  Piece
     static SDL_Texture* GetSprite(PieceType type);
 
     Piece(PieceType type);
-
-    void ShowAt(float x = 0, float y = 0);
+    
+    //for drawing
+    float xVal;
+    float yVal;
+    void Draw();
     
 };

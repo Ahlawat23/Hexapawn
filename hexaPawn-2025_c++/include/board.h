@@ -4,6 +4,8 @@
 #include <piece.h>
 #include<enemy.h>
 #include<player.h>
+#include<playerController.h>
+#include<enemyController.h>
 
 using namespace std;
 
@@ -29,8 +31,6 @@ class Board
     private:
         SquareColour currSquareCol = SquareColour::Darker;
         Square grid[GRID_WIDTH][GRID_HEIGHT];
-        Player* playerPieces[3] = {nullptr, nullptr, nullptr};
-        Enemy* enemyPieces[3] = {nullptr, nullptr, nullptr};
         Board();
         void DrawSquare(SquareColour col, int x, int y );
 
