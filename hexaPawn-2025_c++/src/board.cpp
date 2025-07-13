@@ -43,8 +43,6 @@ void Board::Draw() {
 
             //draw the square and then draw the piece if it has any
             DrawSquare(currSquareCol, xVal, yVal);
-           // if(grid[i][j].currPiece) grid[i][j].currPiece->ShowAt(xVal, yVal);
-
             //flip the colour
             currSquareCol = currSquareCol == SquareColour::Darker ? SquareColour::Lighter : SquareColour::Darker;
 
@@ -81,8 +79,8 @@ void Board::DrawSquare(SquareColour col, int x, int y )
     SDL_RenderFillRect(renderer, &rect);
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); // light blue
 
-    string label = to_string(x) + ", " + to_string(y);
-    SDL_RenderDebugText(renderer, x, y, label.c_str());
+    //string label = to_string(x) + ", " + to_string(y);
+    //SDL_RenderDebugText(renderer, x, y, label.c_str());
     
 
 }

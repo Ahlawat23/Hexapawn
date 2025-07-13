@@ -14,7 +14,8 @@ using namespace std;
 
 enum class SquareColour{
     Darker,
-    Lighter
+    Lighter, 
+    Selected
 };
 
 struct Square

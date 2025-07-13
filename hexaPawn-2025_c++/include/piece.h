@@ -31,6 +31,6 @@ class  Piece
     //for drawing
     float xVal;
     float yVal;
-    void Draw();
+    virtual void Draw();
     
 };
