@@ -3,6 +3,9 @@
 #include <iostream>
 #include <SDL3_image/SDL_image.h>
 
+struct Square; 
+class Board;   
+
 using namespace std;
 
 #define RECT_SIZE 150
@@ -22,15 +25,13 @@ class  Piece
     PieceType _type;
     SDL_Texture* currTexture;
     SDL_FRect rect;
+    Square* onSquare;
     
     static void LoadTextures();
     static SDL_Texture* GetSprite(PieceType type);
 
     Piece(PieceType type);
     
-    //for drawing
-    float xVal;
-    float yVal;
     virtual void Draw();
     
 };

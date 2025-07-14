@@ -5,6 +5,7 @@
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
 #include <string>
+#include <playerController.h>
 
 /* SDL Vars */
 static SDL_Window *window = NULL;
@@ -28,9 +29,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         SDL_Log("Couldn't initialize SDL: %s", SDL_GetError());
         return SDL_APP_FAILURE;
     }
-
-  
-
+    
     if (!SDL_CreateWindowAndRenderer("Hexapawn by Pankaj Ahlawat", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer)) {
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
         return SDL_APP_FAILURE;

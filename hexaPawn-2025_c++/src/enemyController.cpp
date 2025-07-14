@@ -1,7 +1,5 @@
-#include <playerController.h>
-#include <SDL3/SDL.h>
-#include <piece.h>
-#include <board.h>
+#include <enemyController.h>
+#include<enemy.h>
 
 EnemyController& EnemyController::instance() {
     static EnemyController singleton_instance;

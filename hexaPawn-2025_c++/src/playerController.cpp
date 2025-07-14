@@ -10,12 +10,9 @@ PlayerController& PlayerController::instance() {
     return singleton_instance;
 }
 
-PlayerController:: PlayerController(/* args */)
+PlayerController:: PlayerController()
 {
-    for (int i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++) {
-        Pieces[i] = new Player();
-    }
-
+    for (int i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++)  Pieces[i] = new PlayerPiece();
 }
 
 void PlayerController::HandleInput(SDL_Event *event){
@@ -28,14 +25,19 @@ void PlayerController::HandleInput(SDL_Event *event){
         // Handle mouse click at (x, y) with button
 
         if(mouseButton == 1){
-            for (size_t i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++){
-                if (PlayerController::isCursorOnPiece(Pieces[i]) && selectedPiece != Pieces[i]) {   
-                    if(selectedPiece!= nullptr) selectedPiece->state = PlayerPieceState::idle;
-                    selectedPiece = Pieces[i];
-                    Pieces[i]->state = PlayerPieceState::selected;
+            for(auto* _piece : Pieces){
+               if (PlayerController::isCursorOnPiece(_piece) && selectedPiece != _piece) { 
+                      
+                    if(selectedPiece != nullptr) {
+                        selectedPiece->state = PlayerPieceState::idle;
+                        selectedPiece->onSquare->overlay = SquareOverlay::idle;
+                    }
+                    selectedPiece = _piece;
+                    _piece->state = PlayerPieceState::selected;
+                    _piece->onSquare->overlay = SquareOverlay::selected;
+
                 } 
-            }
-            
+            } 
         }
 
     }
@@ -44,29 +46,25 @@ void PlayerController::HandleInput(SDL_Event *event){
  
 void PlayerController::DrawPieces(){
 
-    for (int i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++) {
+    for(auto* _piece : Pieces){
         //if the mousex and mousey falls on Pieces[i]->rect 
         //then set its state to hover
 
-        //if this piece is not selected
-        if(selectedPiece != Pieces[i]){
-            if (!PlayerController::isCursorOnPiece(Pieces[i])) {   
-                Pieces[i]->state = PlayerPieceState::idle;  
+        if(selectedPiece != _piece){
+            if(!PlayerController::isCursorOnPiece(_piece)){
+                _piece->state = PlayerPieceState::idle;
+            } else{
+                _piece->state = PlayerPieceState::hovered;
             }
-            else {
-                Pieces[i]->state = PlayerPieceState::hovered;
-               
-            }
-                   
         }
-        
-        Pieces[i]->Draw();
+
+        _piece->Draw();
     }
     //string label = to_string(mouseX) + ", " + to_string(mouseY);
     //SDL_RenderDebugText(Board::instance().renderer, mouseX, mouseY, label.c_str());
 }
 
-bool PlayerController::isCursorOnPiece(Player* Piece){
+bool PlayerController::isCursorOnPiece(PlayerPiece* Piece){
     SDL_FRect& rect = Piece->rect;
     return mouseX >= rect.x && mouseX <= rect.x + rect.w && mouseY >= rect.y && mouseY <= rect.y + rect.h;
 }

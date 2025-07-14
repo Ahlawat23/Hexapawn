@@ -1,8 +1,8 @@
 #pragma once
 
-#include<player.h>
+#include<playerPiece.h>
 
-using namespace std;
+
 
 class  PlayerController
 {
@@ -12,13 +12,15 @@ class  PlayerController
     static int mouseButton;
    
     public:
-    Player* Pieces[3] = {nullptr, nullptr, nullptr};
-    Player* selectedPiece;
+    PlayerPiece* Pieces[3] = {nullptr, nullptr, nullptr};
+    PlayerPiece* selectedPiece;
+
     static PlayerController& instance(); 
-    PlayerController(/* args */);
-    void HandleInput( SDL_Event *event);
+    PlayerController();
+
+    void HandleInput(SDL_Event *event);
     void DrawPieces();
-    bool isCursorOnPiece(Player* Piece);
+    bool isCursorOnPiece(PlayerPiece* Piece);
      
 };
 

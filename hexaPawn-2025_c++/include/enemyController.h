@@ -2,8 +2,6 @@
 
 #include<enemy.h>
 
-using namespace std;
-
 class  EnemyController
 {
     private:
@@ -13,5 +11,5 @@ class  EnemyController
     static EnemyController& instance(); 
     EnemyController(/* args */);
     void DrawPieces();
-     
+    
 };

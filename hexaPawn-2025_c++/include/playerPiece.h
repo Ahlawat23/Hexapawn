@@ -1,7 +1,6 @@
 #pragma once
 
 #include <piece.h>
-#include <SDL3/SDL.h>
 
 enum class PlayerPieceState{
     idle,
@@ -10,10 +9,10 @@ enum class PlayerPieceState{
 };
 
 // this will handle the user input
-class Player: public Piece
+class PlayerPiece: public Piece
 {  
     public:
-    Player() : Piece(PieceType::player) {}
+    PlayerPiece() : Piece(PieceType::player) {}
     PlayerPieceState state;
     void Draw() override;
 
