@@ -28,16 +28,11 @@ void PlayerController::HandleInput(SDL_Event *event){
         // Handle mouse click at (x, y) with button
 
         if(mouseButton == 1){
-
-            for (size_t i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++)
-            {
-                if (PlayerController::isCursorOnPiece(Pieces[i])) {   
-                
-                    if(selectedPiece != Pieces[i]){
-                        if(selectedPiece!= nullptr) selectedPiece->state = PlayerPieceState::idle;
-                        selectedPiece = Pieces[i];
-                        Pieces[i]->state = PlayerPieceState::selected;
-                    }
+            for (size_t i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++){
+                if (PlayerController::isCursorOnPiece(Pieces[i]) && selectedPiece != Pieces[i]) {   
+                    if(selectedPiece!= nullptr) selectedPiece->state = PlayerPieceState::idle;
+                    selectedPiece = Pieces[i];
+                    Pieces[i]->state = PlayerPieceState::selected;
                 } 
             }
             
