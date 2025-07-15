@@ -99,7 +99,9 @@ void Board::DrawSquare(Square* sqr)
     {
         case SquareOverlay::idle: 
         break;
-        case SquareOverlay::selected: SDL_SetRenderDrawColor(renderer, 11, 110, 171, SDL_ALPHA_OPAQUE);
+        case SquareOverlay::selected:
+            SDL_SetRenderDrawColor(renderer, 11, 110, 171, SDL_ALPHA_OPAQUE);
+            SDL_RenderFillRect(renderer, &rect);
         break;
         case SquareOverlay::available:  DrawAvailableCircle(rect.x, rect.y);
         break;
