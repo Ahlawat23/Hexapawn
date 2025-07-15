@@ -21,6 +21,7 @@ class  PlayerController
     void HandleInput(SDL_Event *event);
     void DrawPieces();
     bool isCursorOnPiece(PlayerPiece* Piece);
+    void CalculateAvailableMoveForSelected();
      
 };
 

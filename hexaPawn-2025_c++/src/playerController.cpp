@@ -16,6 +16,9 @@ PlayerController:: PlayerController()
 }
 
 void PlayerController::HandleInput(SDL_Event *event){
+
+    if(!(Board::instance().currTurn != PieceType::player)) return;
+
     if (event->type == SDL_EVENT_MOUSE_MOTION) {
         mouseX = event->motion.x;
         mouseY = event->motion.y;
@@ -23,7 +26,7 @@ void PlayerController::HandleInput(SDL_Event *event){
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         mouseButton= event->button.button; // 1=left, 2=middle, 3=right
         // Handle mouse click at (x, y) with button
-
+        
         if(mouseButton == 1){
             for(auto* _piece : Pieces){
                if (PlayerController::isCursorOnPiece(_piece) && selectedPiece != _piece) { 
@@ -67,4 +70,9 @@ void PlayerController::DrawPieces(){
 bool PlayerController::isCursorOnPiece(PlayerPiece* Piece){
     SDL_FRect& rect = Piece->rect;
     return mouseX >= rect.x && mouseX <= rect.x + rect.w && mouseY >= rect.y && mouseY <= rect.y + rect.h;
+}
+
+void  PlayerController::CalculateAvailableMoveForSelected(){
+    if(selectedPiece == nullptr) return;
+    //logic to mark grid border as available
 }

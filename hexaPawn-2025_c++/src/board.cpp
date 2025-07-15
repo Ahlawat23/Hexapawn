@@ -48,6 +48,9 @@ void Board::Init(SDL_Renderer* r){
         EnemyController::instance().Pieces[x]->onSquare = grid[x][0];
         grid[x][0]->currPiece = EnemyController::instance().Pieces[x];
     }
+
+    //set turn to player
+    PassTurn(PieceType::player);
 }
 
 /* This function runs once per frame, and it contains all the draw logic */
@@ -138,4 +141,8 @@ void Board::DrawKillCircle(int x, int y){
     rect.y = y+ (SQUARE_HEIGHT/2) - (rect.h/2);
 
     SDL_RenderTexture(Board::instance().renderer, killCircle, NULL, &rect);
+}
+
+void Board::PassTurn(PieceType type){
+    currTurn = type;
 }

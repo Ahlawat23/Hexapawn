@@ -47,6 +47,7 @@ class Board
     public:
         SDL_Renderer* renderer = nullptr;
         Square* grid[GRID_WIDTH][GRID_HEIGHT];
+        PieceType currTurn;
 
         static Board& instance(); 
         void Init(SDL_Renderer* r);
@@ -54,5 +55,6 @@ class Board
         void Draw();
         void DrawAvailableCircle(int x, int y);
         void DrawKillCircle(int x, int y);
+        void PassTurn(PieceType type);
 
 };
