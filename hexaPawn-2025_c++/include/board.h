@@ -2,6 +2,7 @@
 
 #include <SDL3/SDL.h>
 #include <piece.h>
+#include <SDL3_image/SDL_image.h>
 
 
 #define GRID_WIDTH 3
@@ -37,6 +38,9 @@ struct Square
 class Board
 {
     private:
+        static SDL_Texture* availableCircle;
+        static SDL_Texture* killCircle;
+
         Board();
         void DrawSquare(Square* sqr);
 
@@ -48,4 +52,7 @@ class Board
         void Init(SDL_Renderer* r);
 
         void Draw();
+        void DrawAvailableCircle(int x, int y);
+        void DrawKillCircle(int x, int y);
+
 };

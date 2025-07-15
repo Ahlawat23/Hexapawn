@@ -1,7 +1,10 @@
 #include <board.h>
 #include <playerController.h>
 #include <enemyController.h>
+#include <SDL3/SDL.h>
 
+SDL_Texture* Board::availableCircle = nullptr;
+SDL_Texture* Board::killCircle = nullptr;
 
 Board::Board() {
   // Initialization code
@@ -13,12 +16,24 @@ Board& Board::instance() {
 }
 
 void Board::Init(SDL_Renderer* r){
-    renderer = r; 
+    renderer = r;
+    //Load Textures 
+    availableCircle = IMG_LoadTexture(Board::instance().renderer, "assets/availableCircle.png");
+    if (!availableCircle) {
+        SDL_Log("Couldn't load enemy texture: %s\n", SDL_GetError());
+    }
+      
+    killCircle = IMG_LoadTexture(Board::instance().renderer, "assets/KillCircle.png");
+    if (!killCircle) {
+         SDL_Log("Couldn't load enemy texture: %s\n", SDL_GetError());
+    } 
+
     Piece::LoadTextures();
-    SquareColour currSquareCol = SquareColour::Darker;
 
 
     //init grid 
+    SquareColour currSquareCol = SquareColour::Darker;
+
     for (int x = 0; x < GRID_WIDTH; x++)
     {
        for (int y = 0; y < GRID_HEIGHT; y++)  {
@@ -26,14 +41,12 @@ void Board::Init(SDL_Renderer* r){
             currSquareCol = currSquareCol == SquareColour::Darker ? SquareColour::Lighter : SquareColour::Darker;
 
        }
-
         //set up intial position of player peices and enemy pieces
         PlayerController::instance().Pieces[x]->onSquare = grid[x][GRID_HEIGHT-1];
         grid[x][GRID_HEIGHT-1]->currPiece = PlayerController::instance().Pieces[x];
 
         EnemyController::instance().Pieces[x]->onSquare = grid[x][0];
         grid[x][0]->currPiece = EnemyController::instance().Pieces[x];
-
     }
 }
 
@@ -79,39 +92,23 @@ void Board::DrawSquare(Square* sqr)
         default:break;
     }
 
+    SDL_RenderFillRect(renderer, &rect);
+
     //Set overlays on the square based on state
     switch (sqr->overlay)
     {
-        case SquareOverlay::idle: break;
-
-        case SquareOverlay::selected:
-            // Give a mid blue sort of colour
-            SDL_SetRenderDrawColor(renderer, 11, 110, 171, SDL_ALPHA_OPAQUE); 
-            break;
-        case SquareOverlay::available:
-            // Draw a green border for available move
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE); // green
-            {
-                SDL_FRect borderA = rect;
-                borderA.x += 4; borderA.y += 4; borderA.w -= 8; borderA.h -= 8;
-                SDL_RenderRect(renderer, &borderA);
-            }
-            break;
-        case SquareOverlay::kill:
-            // Draw a red border for kill move
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE); // red
-            {
-                SDL_FRect borderK = rect;
-                borderK.x += 4; borderK.y += 4; borderK.w -= 8; borderK.h -= 8;
-                SDL_RenderRect(renderer, &borderK);
-            }
-            break;
-        
+        case SquareOverlay::idle: 
+        break;
+        case SquareOverlay::selected: SDL_SetRenderDrawColor(renderer, 11, 110, 171, SDL_ALPHA_OPAQUE);
+        break;
+        case SquareOverlay::available:  DrawAvailableCircle(rect.x, rect.y);
+        break;
+        case SquareOverlay::kill: DrawKillCircle(rect.x, rect.y);
+        break;
         default: break;
         
     }
     //draw the square
-    SDL_RenderFillRect(renderer, &rect);
 
     //SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); // light blue
     //string label = to_string(x) + ", " + to_string(y);
@@ -121,3 +118,22 @@ void Board::DrawSquare(Square* sqr)
 }
 
 
+void Board::DrawAvailableCircle(int x, int y)
+{
+    SDL_FRect rect;
+    SDL_GetTextureSize(availableCircle, &rect.w, &rect.h);
+    rect.x = x+ (SQUARE_WIDTH/2) - (rect.w/2);
+    rect.y = y+ (SQUARE_HEIGHT/2) - (rect.h/2);
+
+    SDL_RenderTexture(Board::instance().renderer, availableCircle, NULL, &rect);
+}
+
+void Board::DrawKillCircle(int x, int y){
+
+    SDL_FRect rect;
+    SDL_GetTextureSize(killCircle, &rect.w, &rect.h);
+    rect.x = x+ (SQUARE_WIDTH/2) - (rect.w/2);
+    rect.y = y+ (SQUARE_HEIGHT/2) - (rect.h/2);
+
+    SDL_RenderTexture(Board::instance().renderer, killCircle, NULL, &rect);
+}
