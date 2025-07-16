@@ -11,5 +11,7 @@ class  EnemyController
     static EnemyController& instance(); 
     EnemyController(/* args */);
     void DrawPieces();
+    void PlayMove();
+    bool hasWon();
     
 };

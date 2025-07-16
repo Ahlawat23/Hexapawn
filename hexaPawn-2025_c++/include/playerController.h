@@ -13,6 +13,7 @@ class  PlayerController
    
     public:
     PlayerPiece* Pieces[3] = {nullptr, nullptr, nullptr};
+    PlayerPiece* mouseOnPiece;
     PlayerPiece* selectedPiece;
 
     static PlayerController& instance(); 
@@ -22,6 +23,7 @@ class  PlayerController
     void DrawPieces();
     bool isCursorOnPiece(PlayerPiece* Piece);
     void CalculateAvailableMoveForSelected();
+    bool hasWon();
      
 };
 

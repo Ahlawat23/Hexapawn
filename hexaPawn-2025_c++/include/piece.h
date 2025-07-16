@@ -16,7 +16,7 @@ enum class PieceType{
 };
 
 class  Piece
-{
+{ 
     private:
     static SDL_Texture* playerTexture;
     static SDL_Texture* enemyTexture;

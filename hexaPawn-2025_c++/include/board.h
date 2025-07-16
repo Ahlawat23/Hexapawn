@@ -55,6 +55,7 @@ class Board
         void Draw();
         void DrawAvailableCircle(int x, int y);
         void DrawKillCircle(int x, int y);
-        void PassTurn(PieceType type);
+        void PassTurn();
+        bool isFinished();
 
 };

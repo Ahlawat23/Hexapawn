@@ -50,18 +50,18 @@ void Board::Init(SDL_Renderer* r){
     }
 
     //set turn to player
-    PassTurn(PieceType::player);
+    currTurn = PieceType::player;
 }
 
 /* This function runs once per frame, and it contains all the draw logic */
 void Board::Draw() {
+
     SDL_RenderClear(renderer);
     //double loop to iterate through each grid cell
     for (int x = 0; x < GRID_WIDTH; x++)
     {
        for (int y = 0; y < GRID_HEIGHT; y++)
        {
-            //draw the square and then draw the piece if it has any
             DrawSquare(grid[x][y]);
        }
     }
@@ -97,7 +97,7 @@ void Board::DrawSquare(Square* sqr)
 
     SDL_RenderFillRect(renderer, &rect);
 
-    //Set overlays on the square based on state
+    //Set overlays on the square
     switch (sqr->overlay)
     {
         case SquareOverlay::idle: 
@@ -113,7 +113,6 @@ void Board::DrawSquare(Square* sqr)
         default: break;
         
     }
-    //draw the square
 
     //SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); // light blue
     //string label = to_string(x) + ", " + to_string(y);
@@ -143,6 +142,28 @@ void Board::DrawKillCircle(int x, int y){
     SDL_RenderTexture(Board::instance().renderer, killCircle, NULL, &rect);
 }
 
-void Board::PassTurn(PieceType type){
-    currTurn = type;
+void Board::PassTurn(){
+    if(!isFinished()){
+        //if the turn is player, flip it and play enemy moves
+        //else it was enemy turn so now give it to the player
+        if(currTurn== PieceType::player){
+            currTurn = PieceType::enemy;
+            EnemyController::instance().PlayMove();
+        } 
+        else currTurn = PieceType:: player;
+    }
+}
+
+bool Board::isFinished(){
+    //if win show the wininning screen
+    if(PlayerController::instance().hasWon()){
+        //show player won 
+        return true;
+    }
+    else if (EnemyController::instance().hasWon()){
+        //show enemy won
+        return true;
+    }
+    else return false;
+
 }

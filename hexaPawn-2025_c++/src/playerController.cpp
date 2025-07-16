@@ -17,30 +17,50 @@ PlayerController:: PlayerController()
 
 void PlayerController::HandleInput(SDL_Event *event){
 
-    if(!(Board::instance().currTurn != PieceType::player)) return;
+    if(Board::instance().currTurn != PieceType::player) return;
 
     if (event->type == SDL_EVENT_MOUSE_MOTION) {
         mouseX = event->motion.x;
         mouseY = event->motion.y;
+
+        int gridX = mouseX / SQUARE_WIDTH;
+        int gridY = mouseY / SQUARE_HEIGHT;
+
+        //if the current piece is not null and this piec is of type player
+        auto* square = Board::instance().grid[gridX][gridY];
+        if(square->currPiece != nullptr && square->currPiece->_type == PieceType::player){
+            PlayerPiece* newPiece = static_cast<PlayerPiece*>(Board::instance().grid[gridX][gridY]->currPiece);
+            if(mouseOnPiece != newPiece){
+                if(mouseOnPiece) mouseOnPiece->state = PlayerPieceState::idle;
+                mouseOnPiece = newPiece;
+                mouseOnPiece->state = PlayerPieceState::hovered;
+            }           
+        }
+        else {
+            if (mouseOnPiece != nullptr) {
+                mouseOnPiece->state = PlayerPieceState::idle;
+                mouseOnPiece = nullptr;
+            }
+        }
     }
+
+    if(mouseOnPiece == nullptr) return;
+
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         mouseButton= event->button.button; // 1=left, 2=middle, 3=right
         // Handle mouse click at (x, y) with button
         
         if(mouseButton == 1){
-            for(auto* _piece : Pieces){
-               if (PlayerController::isCursorOnPiece(_piece) && selectedPiece != _piece) { 
-                      
-                    if(selectedPiece != nullptr) {
-                        selectedPiece->state = PlayerPieceState::idle;
-                        selectedPiece->onSquare->overlay = SquareOverlay::idle;
-                    }
-                    selectedPiece = _piece;
-                    _piece->state = PlayerPieceState::selected;
-                    _piece->onSquare->overlay = SquareOverlay::selected;
-
-                } 
-            } 
+            //set the perviously selcted piece and square to idle
+            if(selectedPiece != nullptr) {
+                selectedPiece->state = PlayerPieceState::idle;
+                selectedPiece->onSquare->overlay = SquareOverlay::idle;
+            }
+            
+            selectedPiece = mouseOnPiece;
+            selectedPiece->state = PlayerPieceState::selected;
+            selectedPiece->onSquare->overlay = SquareOverlay::selected;
+         
         }
 
     }
@@ -50,17 +70,6 @@ void PlayerController::HandleInput(SDL_Event *event){
 void PlayerController::DrawPieces(){
 
     for(auto* _piece : Pieces){
-        //if the mousex and mousey falls on Pieces[i]->rect 
-        //then set its state to hover
-
-        if(selectedPiece != _piece){
-            if(!PlayerController::isCursorOnPiece(_piece)){
-                _piece->state = PlayerPieceState::idle;
-            } else{
-                _piece->state = PlayerPieceState::hovered;
-            }
-        }
-
         _piece->Draw();
     }
     //string label = to_string(mouseX) + ", " + to_string(mouseY);
@@ -75,4 +84,9 @@ bool PlayerController::isCursorOnPiece(PlayerPiece* Piece){
 void  PlayerController::CalculateAvailableMoveForSelected(){
     if(selectedPiece == nullptr) return;
     //logic to mark grid border as available
+}
+
+bool PlayerController::hasWon(){
+    for (size_t x = 0; x < sizeof(Pieces)/sizeof(Pieces[0]); x++) if(Pieces[x]->onSquare == Board::instance().grid[x][0]) return true;
+    return false;
 }

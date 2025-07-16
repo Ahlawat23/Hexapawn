@@ -40,7 +40,7 @@ SDL_Texture* Piece::GetSprite(PieceType type){
         default:
             return nullptr;
     }
-
+ 
 }
  
 void Piece::Draw( ){
