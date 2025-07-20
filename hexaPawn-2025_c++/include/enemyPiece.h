@@ -10,7 +10,7 @@ class EnemyPiece : public Piece
     EnemyPiece() : Piece(PieceType::enemy) {}
 
     void Draw() override;
-    std::vector<Square*> CalValidMoves() override;
+    std::vector<std::pair<Square*, EnemyPiece*>> CalValidMoves();
 
 };
 

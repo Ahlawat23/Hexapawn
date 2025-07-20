@@ -17,9 +17,9 @@ class PlayerPiece: public Piece
     public:
     PlayerPieceState state;
     PlayerPiece() : Piece(PieceType::player) {}
-    
+
     void Draw() override;
-    std::vector<Square*> CalValidMoves() override;
+    std::vector<Square*> CalValidMoves();
 
 };
 

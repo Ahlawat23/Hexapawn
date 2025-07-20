@@ -35,6 +35,5 @@ class  Piece
     Piece(PieceType type);
     
     virtual void Draw();
-    virtual std::vector<Square*> CalValidMoves();
     
 };
