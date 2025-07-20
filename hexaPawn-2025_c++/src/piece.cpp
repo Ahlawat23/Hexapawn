@@ -7,7 +7,7 @@ SDL_Texture* Piece::enemyTexture = nullptr;
 Piece::Piece(PieceType type){
     _type = type;
     currTexture = Piece::GetSprite(_type);
-    rect = {0, 0, RECT_SIZE, RECT_SIZE};
+    rect = {0, 0, PIECE_RECT_SIZE, PIECE_RECT_SIZE};
 
 }
 

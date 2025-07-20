@@ -2,6 +2,7 @@
 #include <playerController.h>
 #include <enemyController.h>
 #include <SDL3/SDL.h>
+#include <config.h>
 
 SDL_Texture* Board::availableCircle = nullptr;
 SDL_Texture* Board::killCircle = nullptr;
@@ -69,6 +70,7 @@ void Board::Draw() {
     PlayerController::instance().DrawPieces();
     EnemyController::instance().DrawPieces();
     /* put the newly-cleared rendering on the screen. */
+    DrawGameOverScreen();
     SDL_RenderPresent(renderer);
 }
 
@@ -140,6 +142,24 @@ void Board::DrawKillCircle(int x, int y){
     rect.y = y+ (SQUARE_HEIGHT/2) - (rect.h/2);
 
     SDL_RenderTexture(Board::instance().renderer, killCircle, NULL, &rect);
+}
+
+void Board::DrawGameOverScreen(){
+   
+    //create a rect of 300 width and height
+    SDL_FRect rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = WINDOW_WIDTH;
+    rect.h = WINDOW_HEIGHT;
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 191); // DARKER
+
+    SDL_RenderFillRect(renderer, &rect);
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+
+
+
 }
 
 void Board::PassTurn(){

@@ -3,13 +3,9 @@
 #include <SDL3/SDL.h>
 #include <piece.h>
 #include <SDL3_image/SDL_image.h>
+#include <config.h>
 
 
-#define GRID_WIDTH 3
-#define GRID_HEIGHT 3
-
-#define SQUARE_HEIGHT 300
-#define SQUARE_WIDTH 300
 
 enum class SquareColour{
     Darker,
@@ -59,6 +55,8 @@ class Board
         void Draw();
         void DrawAvailableCircle(int x, int y);
         void DrawKillCircle(int x, int y);
+        void DrawGameOverScreen();
+
         void PassTurn();
         bool isFinished();
 

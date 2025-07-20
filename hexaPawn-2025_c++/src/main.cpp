@@ -6,19 +6,12 @@
 #include <iostream>
 #include <string>
 #include <playerController.h>
+#include <config.h>
 
 /* SDL Vars */
 static SDL_Window *window = NULL;
 static SDL_Renderer *renderer = NULL;
 static Uint64 last_time = 0;
-
-#define WINDOW_WIDTH 900
-#define WINDOW_HEIGHT 900
-
-/* hexapawn Vars */
-static SDL_Texture *texture = NULL;
-extern unsigned char icon_bmp[];
-extern unsigned int icon_bmp_len;
 
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])

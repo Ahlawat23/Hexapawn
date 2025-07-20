@@ -3,14 +3,12 @@
 #include <iostream>
 #include <SDL3_image/SDL_image.h>
 #include <vector>
+#include <config.h>
 
 
 struct Square; 
 class Board;   
 
-using namespace std;
-
-#define RECT_SIZE 150
 
 enum class PieceType{
     player, 
