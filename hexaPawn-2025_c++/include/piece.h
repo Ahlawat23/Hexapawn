@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <SDL3_image/SDL_image.h>
+#include <vector>
+
 
 struct Square; 
 class Board;   
@@ -33,5 +35,6 @@ class  Piece
     Piece(PieceType type);
     
     virtual void Draw();
+    virtual std::vector<Square*> CalValidMoves();
     
 };

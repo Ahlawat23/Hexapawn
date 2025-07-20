@@ -4,8 +4,6 @@
 #include <iostream>
 #include <vector>
 
-
-
 class  PlayerController
 {
     private:
@@ -17,6 +15,7 @@ class  PlayerController
     PlayerPiece* Pieces[3] = {nullptr, nullptr, nullptr};
     Square* mouseOnSquare;
     PlayerPiece* mouseOnPiece;
+
     PlayerPiece* selectedPiece;
     std::vector<Square*> availableMoves;
 

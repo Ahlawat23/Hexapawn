@@ -90,7 +90,8 @@ void  PlayerController::onMouseDown(){
     }
     else{
         if(mouseOnSquare->overlay == SquareOverlay::available || mouseOnSquare->overlay == SquareOverlay::kill){
-            movePiece(selectedPiece, mouseOnSquare); 
+            movePiece(selectedPiece, mouseOnSquare);
+            Board::instance().PassTurn();
         }
     }
     
@@ -114,7 +115,7 @@ void PlayerController::movePiece(PlayerPiece* playerPiece, Square* newSquare){
     playerPiece->state = PlayerPieceState::idle;
     resetAvailbleMoves();
     selectedPiece = nullptr;
-    Board::instance().PassTurn();
+    
 }
 
 void PlayerController::DrawPieces(){

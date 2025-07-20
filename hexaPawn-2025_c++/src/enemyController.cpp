@@ -1,5 +1,5 @@
 #include <enemyController.h>
-#include<enemy.h>
+#include<enemyPiece.h>
 #include <board.h>
 
 EnemyController& EnemyController::instance() {
@@ -7,22 +7,18 @@ EnemyController& EnemyController::instance() {
     return singleton_instance;
 }
 
-EnemyController:: EnemyController(/* args */)
-{
+EnemyController:: EnemyController(/* args */){
     //init player pieces
-    for (int i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++) Pieces[i] = new Enemy();
-
+    for (int i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++) Pieces[i] = new EnemyPiece();
 }
 
- 
 void EnemyController::DrawPieces(){
-
-    for(auto* _piece : Pieces){
-        _piece->Draw();
-    }
+    for(auto* _piece : Pieces) _piece->Draw();
 }
+
 
 void EnemyController::PlayMove(){
+    //cal all availableMoves and then pick one at random
     
 }
 

@@ -29,7 +29,7 @@ void PlayerPiece::Draw( ){
 std::vector<Square*> PlayerPiece::CalValidMoves(){
 
     std::vector<Square*> validMoves;
-    
+    if(onSquare == nullptr) return validMoves;
     
     int x = onSquare->xIndex();
     int y = onSquare->yIndex();
