@@ -17,8 +17,8 @@ EnemyController:: EnemyController(/* args */)
  
 void EnemyController::DrawPieces(){
 
-    for (int i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++) {
-        Pieces[i]->Draw();
+    for(auto* _piece : Pieces){
+        _piece->Draw();
     }
 }
 

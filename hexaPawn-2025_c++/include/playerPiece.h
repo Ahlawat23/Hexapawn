@@ -1,6 +1,9 @@
 #pragma once
 
 #include <piece.h>
+#include <iostream>
+#include <vector>
+
 
 enum class PlayerPieceState{
     idle,
@@ -12,9 +15,10 @@ enum class PlayerPieceState{
 class PlayerPiece: public Piece
 {  
     public:
-    PlayerPiece() : Piece(PieceType::player) {}
     PlayerPieceState state;
+    PlayerPiece() : Piece(PieceType::player) {}
     void Draw() override;
+    std::vector<Square*> CalValidMoves();
 
 };
 

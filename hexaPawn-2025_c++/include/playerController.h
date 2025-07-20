@@ -1,6 +1,8 @@
 #pragma once
 
 #include<playerPiece.h>
+#include <iostream>
+#include <vector>
 
 
 
@@ -13,16 +15,23 @@ class  PlayerController
    
     public:
     PlayerPiece* Pieces[3] = {nullptr, nullptr, nullptr};
+    Square* mouseOnSquare;
     PlayerPiece* mouseOnPiece;
     PlayerPiece* selectedPiece;
+    std::vector<Square*> availableMoves;
 
     static PlayerController& instance(); 
     PlayerController();
 
     void HandleInput(SDL_Event *event);
     void DrawPieces();
-    bool isCursorOnPiece(PlayerPiece* Piece);
-    void CalculateAvailableMoveForSelected();
+
+    void onMouseHover();
+    void onMouseDown();
+
+    void movePiece(PlayerPiece* playerPiece, Square* newSquare);
+
+    void resetAvailbleMoves();
     bool hasWon();
      
 };

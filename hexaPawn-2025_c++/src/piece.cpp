@@ -44,6 +44,7 @@ SDL_Texture* Piece::GetSprite(PieceType type){
 }
  
 void Piece::Draw( ){
+    if(onSquare == nullptr) return;
     SDL_GetTextureSize(currTexture, &rect.w, &rect.h);
     rect.x = onSquare->xVal+ (SQUARE_WIDTH/2) - (rect.w/2);
     rect.y = onSquare->yVal+ (SQUARE_HEIGHT/2) - (rect.h/2);

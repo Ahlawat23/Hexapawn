@@ -1,5 +1,7 @@
 #include <playerController.h>
 #include <board.h>
+#include <iostream>
+#include <vector>
 
 int PlayerController::mouseX = 0;
 int PlayerController::mouseY = 0;
@@ -22,51 +24,99 @@ void PlayerController::HandleInput(SDL_Event *event){
     if (event->type == SDL_EVENT_MOUSE_MOTION) {
         mouseX = event->motion.x;
         mouseY = event->motion.y;
-
-        int gridX = mouseX / SQUARE_WIDTH;
-        int gridY = mouseY / SQUARE_HEIGHT;
-
-        //if the current piece is not null and this piec is of type player
-        auto* square = Board::instance().grid[gridX][gridY];
-        if(square->currPiece != nullptr && square->currPiece->_type == PieceType::player){
-            PlayerPiece* newPiece = static_cast<PlayerPiece*>(Board::instance().grid[gridX][gridY]->currPiece);
-            if(mouseOnPiece != newPiece){
-                if(mouseOnPiece) mouseOnPiece->state = PlayerPieceState::idle;
-                mouseOnPiece = newPiece;
-                mouseOnPiece->state = PlayerPieceState::hovered;
-            }           
-        }
-        else {
-            if (mouseOnPiece != nullptr) {
-                mouseOnPiece->state = PlayerPieceState::idle;
-                mouseOnPiece = nullptr;
-            }
-        }
+        onMouseHover();
     }
-
-    if(mouseOnPiece == nullptr) return;
 
     if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN) {
         mouseButton= event->button.button; // 1=left, 2=middle, 3=right
-        // Handle mouse click at (x, y) with button
-        
-        if(mouseButton == 1){
-            //set the perviously selcted piece and square to idle
-            if(selectedPiece != nullptr) {
-                selectedPiece->state = PlayerPieceState::idle;
-                selectedPiece->onSquare->overlay = SquareOverlay::idle;
-            }
-            
-            selectedPiece = mouseOnPiece;
-            selectedPiece->state = PlayerPieceState::selected;
-            selectedPiece->onSquare->overlay = SquareOverlay::selected;
-         
-        }
-
+        if(mouseButton == 1) onMouseDown(); 
     }
 
 }
- 
+
+void PlayerController::onMouseHover(){
+    int gridX = mouseX / SQUARE_WIDTH;
+    int gridY = mouseY / SQUARE_HEIGHT;
+
+    //find the square it is on
+    mouseOnSquare = Board::instance().grid[gridX][gridY];
+
+    if(mouseOnSquare->currPiece == nullptr || mouseOnSquare->currPiece->_type != PieceType::player ){
+        if(mouseOnPiece) mouseOnPiece->state = PlayerPieceState::idle;
+        mouseOnPiece = nullptr;
+        return;
+    }
+    //store it in a temp piece
+    PlayerPiece* tempPiece = static_cast<PlayerPiece*>(Board::instance().grid[gridX][gridY]->currPiece);
+    //if the previous mouse on piece is neither this temp piece nor the selected piece then set the older one to idle and new one to hover
+    if (tempPiece != mouseOnPiece) {
+        //if the previous mouse piece is not a selected piece then we set its state to idle
+        if (mouseOnPiece != nullptr && mouseOnPiece != selectedPiece) mouseOnPiece->state = PlayerPieceState::idle;
+
+        //now mouse on piece is the latet piece
+        mouseOnPiece = tempPiece;
+
+        if (mouseOnPiece != selectedPiece) {
+            mouseOnPiece->state = PlayerPieceState::hovered;
+           
+        }
+        else {
+            if (mouseOnPiece != nullptr && mouseOnPiece != selectedPiece) mouseOnPiece->state = PlayerPieceState::idle;
+            mouseOnPiece = nullptr;
+        }
+
+    }
+    
+}
+
+void  PlayerController::onMouseDown(){
+
+    if(mouseOnPiece != nullptr) {
+        //set the perviously selcted piece and square to idle
+        if(selectedPiece != nullptr) {
+            selectedPiece->state = PlayerPieceState::idle;
+            selectedPiece->onSquare->overlay = SquareOverlay::idle;
+
+            resetAvailbleMoves();
+        }
+                
+        selectedPiece = mouseOnPiece;
+        selectedPiece->state = PlayerPieceState::selected;
+        selectedPiece->onSquare->overlay = SquareOverlay::selected;
+
+        //calculate the available moves and mark thier square as available
+        availableMoves = selectedPiece->CalValidMoves();
+
+    }
+    else{
+        if(mouseOnSquare->overlay == SquareOverlay::available || mouseOnSquare->overlay == SquareOverlay::kill){
+            movePiece(selectedPiece, mouseOnSquare); 
+        }
+    }
+    
+            
+}
+
+void PlayerController::movePiece(PlayerPiece* playerPiece, Square* newSquare){
+    //rest the square the player piece is going to move on from
+    playerPiece->onSquare->currPiece = nullptr;
+    playerPiece->onSquare->overlay = SquareOverlay::idle;
+
+    //kill the piece on the square if it exists
+    //this will only remove it from the draw part, since the draw on happens if (onSquare != nullptr)
+    if(newSquare->currPiece) newSquare->currPiece->onSquare = nullptr;
+
+    //move the piece
+    playerPiece->onSquare = newSquare;
+    newSquare->currPiece = playerPiece;
+
+    //reset the playerpiece
+    playerPiece->state = PlayerPieceState::idle;
+    resetAvailbleMoves();
+    selectedPiece = nullptr;
+    Board::instance().PassTurn();
+}
+
 void PlayerController::DrawPieces(){
 
     for(auto* _piece : Pieces){
@@ -76,14 +126,10 @@ void PlayerController::DrawPieces(){
     //SDL_RenderDebugText(Board::instance().renderer, mouseX, mouseY, label.c_str());
 }
 
-bool PlayerController::isCursorOnPiece(PlayerPiece* Piece){
-    SDL_FRect& rect = Piece->rect;
-    return mouseX >= rect.x && mouseX <= rect.x + rect.w && mouseY >= rect.y && mouseY <= rect.y + rect.h;
-}
 
-void  PlayerController::CalculateAvailableMoveForSelected(){
-    if(selectedPiece == nullptr) return;
-    //logic to mark grid border as available
+void PlayerController::resetAvailbleMoves(){
+    for(auto* square: availableMoves) square->overlay = SquareOverlay::idle; 
+
 }
 
 bool PlayerController::hasWon(){

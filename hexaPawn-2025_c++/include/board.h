@@ -27,6 +27,10 @@ struct Square
 {
     int xVal;
     int yVal;
+
+    int xIndex() const{ return xVal/300;}
+    int yIndex() const{ return yVal/300;}
+
    
     SquareColour colour;
     SquareOverlay overlay;
