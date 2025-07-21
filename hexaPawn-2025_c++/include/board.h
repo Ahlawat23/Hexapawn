@@ -41,7 +41,13 @@ class Board
     private:
         static SDL_Texture* availableCircle;
         static SDL_Texture* killCircle;
-        static TTF_Font* font;
+        
+        static SDL_Texture* niceWinText;
+        static SDL_Texture* hireMeText;
+        static SDL_Texture* emailText;
+        static SDL_Texture* failureText1;
+        static SDL_Texture* failureText2;
+
 
         Board();
         void DrawSquare(Square* sqr);
@@ -53,7 +59,8 @@ class Board
 
         static Board& instance(); 
         void Init(SDL_Renderer* r);
-
+        void LoadAllFont();
+        void LoadAllTexture();
         void Draw();
         void DrawAvailableCircle(int x, int y);
         void DrawKillCircle(int x, int y);
@@ -61,5 +68,7 @@ class Board
 
         void PassTurn();
         bool isFinished();
+        void DrawPlayerWon();
+        void DrawEnemyWon();
 
 };
