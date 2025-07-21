@@ -15,7 +15,7 @@ SOURCES = $(wildcard $(SRCDIR)/*.cpp)
 # Linker flags
 # Verify the exact name of the SDL3_image library file in C:/msys64/mingw64/lib
 # Change -lSDL3_image to -lSDL3_image-2.0 if your file is libSDL3_image-2.0.a
-LDFLAGS = -LC:/msys64/mingw64/lib -lSDL3 -lSDL3_image -lz -lpng -ljpeg -ltiff -lwebp -mwindows
+LDFLAGS = -LC:/msys64/mingw64/lib  -lSDL3 -lSDL3_image -lSDL3_ttf -lfreetype -lharfbuzz -lz -lpng -ljpeg -ltiff -lwebp -mwindows
 
 all: $(TARGET)
 

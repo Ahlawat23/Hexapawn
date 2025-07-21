@@ -3,9 +3,11 @@
 #include <enemyController.h>
 #include <SDL3/SDL.h>
 #include <config.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 SDL_Texture* Board::availableCircle = nullptr;
 SDL_Texture* Board::killCircle = nullptr;
+TTF_Font* Board::font =nullptr;
 
 Board::Board() {
   // Initialization code
@@ -31,6 +33,11 @@ void Board::Init(SDL_Renderer* r){
 
     Piece::LoadTextures();
 
+    //Load fonts
+    font = TTF_OpenFont("assets/cour.ttf", 24);
+    if (font == nullptr) {
+        // Handle error
+    }
 
     //init grid 
     SquareColour currSquareCol = SquareColour::Darker;
@@ -157,6 +164,28 @@ void Board::DrawGameOverScreen(){
 
     SDL_RenderFillRect(renderer, &rect);
     SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+
+     // Define the color of our text (white)
+    SDL_Color textColor = { 255, 255, 255, 255 }; // R, G, B, A
+
+    // 2. Render the text to an SDL_Surface.
+    // TTF_RenderText_Blended provides high-quality text with alpha blending.
+    SDL_Surface* textSurface = TTF_RenderText_Blended(font, "Hello World", 11, textColor);
+
+    // 3. Create a hardware-accelerated texture from the surface.
+    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+    
+    // 4. Set up the destination rectangle for the text.
+    // We'll position it in the center of the screen.
+    SDL_FRect textRect;
+    textRect.w = textSurface->w;
+    textRect.h = textSurface->h;
+    textRect.x = (WINDOW_WIDTH - textRect.w) / 2.0f;
+    textRect.y = (WINDOW_HEIGHT - textRect.h) / 2.0f;
+    SDL_RenderTexture(renderer, textTexture, NULL, &textRect);
+    // 5. Free the temporary surface, as the texture holds the data now.
+    SDL_DestroySurface(textSurface);
+   
 
 
 

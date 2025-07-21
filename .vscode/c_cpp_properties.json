@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/hexaPawn-2025_c++/include"
+                
             ],
             "defines": [
                 "_DEBUG",

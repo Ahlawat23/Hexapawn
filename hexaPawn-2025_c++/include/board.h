@@ -4,6 +4,7 @@
 #include <piece.h>
 #include <SDL3_image/SDL_image.h>
 #include <config.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 
 
@@ -40,6 +41,7 @@ class Board
     private:
         static SDL_Texture* availableCircle;
         static SDL_Texture* killCircle;
+        static TTF_Font* font;
 
         Board();
         void DrawSquare(Square* sqr);

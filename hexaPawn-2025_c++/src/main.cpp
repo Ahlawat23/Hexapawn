@@ -7,6 +7,7 @@
 #include <string>
 #include <playerController.h>
 #include <config.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 /* SDL Vars */
 static SDL_Window *window = NULL;
@@ -25,6 +26,13 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     
     if (!SDL_CreateWindowAndRenderer("Hexapawn by Pankaj Ahlawat", WINDOW_WIDTH, WINDOW_HEIGHT, 0, &window, &renderer)) {
         SDL_Log("Couldn't create window/renderer: %s", SDL_GetError());
+        return SDL_APP_FAILURE;
+    }
+
+    if (TTF_Init() == -1) {
+        // Use TTF_GetError() for errors from the TTF library
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't initialize SDL_ttf: %s", SDL_GetError());
+        SDL_Quit(); // Clean up SDL if TTF fails to init
         return SDL_APP_FAILURE;
     }
 
@@ -56,6 +64,8 @@ SDL_AppResult SDL_AppIterate(void *appstate)
 void SDL_AppQuit(void *appstate, SDL_AppResult result)
 {
     /* SDL will clean up the window/renderer for us. */
+    TTF_Quit();
+    SDL_Log("SDL_ttf quit.");
 }
 
 
