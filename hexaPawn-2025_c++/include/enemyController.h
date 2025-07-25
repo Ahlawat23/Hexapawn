@@ -11,6 +11,7 @@ class  EnemyController
     public:
     EnemyPiece* Pieces[3] = {nullptr, nullptr, nullptr};
     std::vector<std::pair<Square*, EnemyPiece*>> availableMoves;
+    bool isHard;
     
     static EnemyController& instance(); 
     EnemyController(/* args */);
@@ -18,6 +19,8 @@ class  EnemyController
     void DrawPieces();
 
     void PlayMove();
+    void PlayEasy();
+    void PlayHard();
     void movePiece(EnemyPiece* playerPiece, Square* newSquare);
 
     bool hasWon();

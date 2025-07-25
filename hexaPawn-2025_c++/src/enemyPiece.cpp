@@ -12,7 +12,8 @@ void EnemyPiece::Draw( ){
     SDL_RenderTexture(Board::instance().renderer, currTexture, NULL, &rect);
 }
 
-std::vector<std::pair<Square*, EnemyPiece*>> EnemyPiece::CalValidMoves(){
+
+std::vector<std::pair<Square*, EnemyPiece*>> EnemyPiece::CalForwardMove(){
 
     std::vector<std::pair<Square*, EnemyPiece*>> validMoves;
     if(onSquare == nullptr) return validMoves;
@@ -25,7 +26,22 @@ std::vector<std::pair<Square*, EnemyPiece*>> EnemyPiece::CalValidMoves(){
         //check on the forward square if it is idle or not
         Square* forward = Board::instance().grid[x][y+1];
         if(forward->currPiece == nullptr) validMoves.push_back(std::make_pair(forward, this));
-        
+    }
+    
+  
+    return validMoves;
+}
+
+
+std::vector<std::pair<Square*, EnemyPiece*>> EnemyPiece::CalKillMoves(){
+
+    std::vector<std::pair<Square*, EnemyPiece*>> validMoves;
+    if(onSquare == nullptr) return validMoves;
+
+    int x = onSquare->xIndex();
+    int y = onSquare->yIndex();
+
+    if(y < GRID_HEIGHT-1){
         //if(y+1)(x+-1) has player
         //check on the left square
         if(x > 0){

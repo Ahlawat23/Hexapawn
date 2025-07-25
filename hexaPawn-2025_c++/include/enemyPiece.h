@@ -8,9 +8,11 @@ class EnemyPiece : public Piece
 {
     public:
     EnemyPiece() : Piece(PieceType::enemy) {}
+   
 
     void Draw() override;
-    std::vector<std::pair<Square*, EnemyPiece*>> CalValidMoves();
+    std::vector<std::pair<Square*, EnemyPiece*>> CalForwardMove();
+    std::vector<std::pair<Square*, EnemyPiece*>> CalKillMoves();
 
 };
 

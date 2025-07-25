@@ -15,6 +15,9 @@ EnemyController& EnemyController::instance() {
 EnemyController:: EnemyController(/* args */){
     //init player pieces
     for (int i = 0; i < sizeof(Pieces)/sizeof(Pieces[0]); i++) Pieces[i] = new EnemyPiece();
+
+    //flip the coin if the enemy should be easy or hard
+    bool isHard = std::uniform_int_distribution<>(0, 1)(gen) == 0;
 }
 
 void EnemyController::DrawPieces(){
@@ -24,12 +27,25 @@ void EnemyController::DrawPieces(){
 
 void EnemyController::PlayMove(){
     //cal all availableMoves and then pick one at random
+    if(isHard) PlayHard();
+    else PlayEasy();
+    
+    Board::instance().PassTurn();
+    
+}
+
+void EnemyController::PlayEasy(){
+    std::vector<std::pair<Square*, EnemyPiece*>> availableMoves;
 
     // Collect all valid moves from each enemy piece
     for(auto* _piece : Pieces) {
-        std::vector<std::pair<Square*, EnemyPiece*>> moves = _piece->CalValidMoves();
-        availableMoves.insert(availableMoves.end(), moves.begin(), moves.end());
+        std::vector<std::pair<Square*, EnemyPiece*>> moves = _piece->CalForwardMove();
+            availableMoves.insert(availableMoves.end(), moves.begin(), moves.end());
+
+            moves = _piece->CalKillMoves();
+            availableMoves.insert(availableMoves.end(), moves.begin(), moves.end());
     }
+
     if (availableMoves.empty()) {
         // No moves available,
         Board::instance().wonPlayer = 1;
@@ -39,7 +55,38 @@ void EnemyController::PlayMove(){
     std::uniform_int_distribution<> dis(0, availableMoves.size() - 1);
     int randomIndex = dis(gen);
     movePiece(availableMoves[randomIndex].second, availableMoves[randomIndex].first);
-    Board::instance().PassTurn();
+
+}
+
+void EnemyController::PlayHard(){
+
+     // First, try to collect all forward moves
+    std::vector<std::pair<Square*, EnemyPiece*>> forwardMoves;
+    std::vector<std::pair<Square*, EnemyPiece*>> killMoves;
+
+    for (auto* _piece : Pieces) {
+        std::vector<std::pair<Square*, EnemyPiece*>> moves = _piece->CalForwardMove();
+        forwardMoves.insert(forwardMoves.end(), moves.begin(), moves.end());
+
+        moves = _piece->CalKillMoves();
+        killMoves.insert(killMoves.end(), moves.begin(), moves.end());
+    }
+    if (!killMoves.empty()) {
+        std::uniform_int_distribution<> dis(0, killMoves.size() - 1);
+        int randomIndex = dis(gen);
+        movePiece(killMoves[randomIndex].second, killMoves[randomIndex].first);
+    }
+    else if (!forwardMoves.empty()) {
+        std::uniform_int_distribution<> dis(0, forwardMoves.size() - 1);
+        int randomIndex = dis(gen);
+        movePiece(forwardMoves[randomIndex].second, forwardMoves[randomIndex].first);
+    }
+          
+    else {
+        // No moves available
+        Board::instance().wonPlayer = 1;
+        return;
+    }
     
 }
 
