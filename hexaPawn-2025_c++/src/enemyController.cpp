@@ -2,6 +2,7 @@
 #include<enemyPiece.h>
 #include <board.h>
 #include <random>
+#include <config.h>
 
 static std::random_device rd;
 static std::mt19937 gen(rd());
@@ -29,6 +30,11 @@ void EnemyController::PlayMove(){
         std::vector<std::pair<Square*, EnemyPiece*>> moves = _piece->CalValidMoves();
         availableMoves.insert(availableMoves.end(), moves.begin(), moves.end());
     }
+    if (availableMoves.empty()) {
+        // No moves available,
+        Board::instance().wonPlayer = 1;
+        return;
+    }
     // Pick one at random if there are any moves
     std::uniform_int_distribution<> dis(0, availableMoves.size() - 1);
     int randomIndex = dis(gen);
@@ -55,6 +61,7 @@ void EnemyController::movePiece(EnemyPiece* enemyPiece, Square* newSquare){
 }
 
 bool EnemyController::hasWon(){
-    for (size_t x = 0; x < sizeof(Pieces)/sizeof(Pieces[0]); x++) if(Pieces[x]->onSquare == Board::instance().grid[x][GRID_HEIGHT-1]) return true;
+    for(auto* _piece : Pieces)
+        if(_piece->onSquare && _piece->onSquare->yIndex() == GRID_HEIGHT-1) return true;
     return false;
 }

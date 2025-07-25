@@ -4,6 +4,9 @@
 #include <SDL3/SDL.h>
 #include <config.h>
 #include <SDL3_ttf/SDL_ttf.h>
+#include <iostream> 
+using std::string;
+using std::to_string;
 
 SDL_Texture* Board::availableCircle = nullptr;
 SDL_Texture* Board::killCircle = nullptr;
@@ -99,9 +102,6 @@ void Board::LoadAllTexture(){
          SDL_Log("Couldn't load enemy texture: %s\n", SDL_GetError());
     } 
 
-        
-
-
 }
 
 /* This function runs once per frame, and it contains all the draw logic */
@@ -120,7 +120,7 @@ void Board::Draw() {
     PlayerController::instance().DrawPieces();
     EnemyController::instance().DrawPieces();
     /* put the newly-cleared rendering on the screen. */
-    DrawEnemyWon();
+    DrawGameOverScreen();
     SDL_RenderPresent(renderer);
 }
 
@@ -197,6 +197,7 @@ void Board::DrawKillCircle(int x, int y){
 
 
 void Board::PassTurn(){
+    
     if(!isFinished()){
         //if the turn is player, flip it and play enemy moves
         //else it was enemy turn so now give it to the player
@@ -210,19 +211,28 @@ void Board::PassTurn(){
 
 bool Board::isFinished(){
     //if win show the wininning screen
+
     if(PlayerController::instance().hasWon()){
-        //show player won 
+        wonPlayer = 1;
         return true;
     }
     else if (EnemyController::instance().hasWon()){
-        //show enemy won
+        wonPlayer = 2;
         return true;
     }
     else return false;
 
 }
+void Board::DrawGameOverScreen(){
+    // SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); // light blue
+    // std::string label = *wonPlayer == PieceType::player ? "player won" : "enemy won";
+    // SDL_RenderDebugText(renderer, 0, 0, label.c_str());
+    if(wonPlayer == 0) return;
+    if(wonPlayer == 1) DrawPlayerWonScreen();
+    if(wonPlayer == 2) DrawEnemyWonScreen();
+}
 
-void Board::DrawPlayerWon(){
+void Board::DrawPlayerWonScreen(){
 
     //draw the overlay
     SDL_FRect rect;
@@ -260,7 +270,7 @@ void Board::DrawPlayerWon(){
     SDL_RenderTexture(renderer, hireMeText, NULL, &textRect);
 }
 
-void Board::DrawEnemyWon(){
+void Board::DrawEnemyWonScreen(){
     //draw the overlay
     SDL_FRect rect;
     rect.x = 0;

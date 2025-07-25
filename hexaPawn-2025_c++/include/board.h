@@ -56,6 +56,7 @@ class Board
         SDL_Renderer* renderer = nullptr;
         Square* grid[GRID_WIDTH][GRID_HEIGHT];
         PieceType currTurn;
+        int wonPlayer = 0; //0 means games running, 1 means player won, 2 means player won
 
         static Board& instance(); 
         void Init(SDL_Renderer* r);
@@ -64,11 +65,12 @@ class Board
         void Draw();
         void DrawAvailableCircle(int x, int y);
         void DrawKillCircle(int x, int y);
-        void DrawGameOverScreen();
 
         void PassTurn();
         bool isFinished();
-        void DrawPlayerWon();
-        void DrawEnemyWon();
+
+        void DrawGameOverScreen();
+        void DrawPlayerWonScreen();
+        void DrawEnemyWonScreen();
 
 };

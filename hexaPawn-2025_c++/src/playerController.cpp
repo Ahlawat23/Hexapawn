@@ -134,6 +134,19 @@ void PlayerController::resetAvailbleMoves(){
 }
 
 bool PlayerController::hasWon(){
-    for (size_t x = 0; x < sizeof(Pieces)/sizeof(Pieces[0]); x++) if(Pieces[x]->onSquare == Board::instance().grid[x][0]) return true;
+
+    for(auto* _piece : Pieces)
+        if(_piece->onSquare &&_piece->onSquare->yIndex() == 0) return true;
+
+     // Check if any player piece has a valid move
+    for (auto* _piece : Pieces) {
+        if (_piece->onSquare) {
+            std::vector<Square*> availmoves = _piece->peekValidMoves();
+            if (!availmoves.empty())
+                return false; // At least one move available, not lost
+        }
+    }
+
+    Board::instance().wonPlayer = 2;
     return false;
 }

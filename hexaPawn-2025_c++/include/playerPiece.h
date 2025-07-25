@@ -20,6 +20,7 @@ class PlayerPiece: public Piece
 
     void Draw() override;
     std::vector<Square*> CalValidMoves();
+    std::vector<Square*> peekValidMoves();
 
 };
 
